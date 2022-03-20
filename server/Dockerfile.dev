@@ -1,0 +1,18 @@
+#got the node base image
+FROM node:16-alpine
+
+#build a new workdir in the root of the container called app and dump all the app files inside it
+WORKDIR '/app'
+
+#copying just package.json so when we change anything inside it we run npm i in case of build
+COPY package.json .
+RUN npm install
+
+#some fix related to ubuntu
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+
+#copying the dev files
+COPY . .
+
+#start up the react application
+CMD ["npm", "run", "dev"]
